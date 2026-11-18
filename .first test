@@ -1,43 +1,55 @@
 #include <Wire.h>
 #include <BH1750.h>
+
 const int analogInPin1 = A1;
 int sensorValue1 = 0;
 const int TrigPin = 2; 
 const int EchoPin = 3; 
 float cm; 
 
+// Create sensor object
 BH1750 lightMeter;
+
 void setup() {
-Serial.begin(9600);
-Wire.begin();
-pinMode(TrigPin, OUTPUT); 
-pinMode(EchoPin, INPUT); 
-lightMeter.begin();
-Serial.println(F("BH1750 Test Begin"));
+  // Initialize serial communication
+  Serial.begin(9600);
+
+  // Initialize I2C bus (Wire)
+  Wire.begin();
+  pinMode(TrigPin, OUTPUT); 
+  pinMode(EchoPin, INPUT); 
+
+  // Initialize light sensor
+  lightMeter.begin();
+
+  Serial.println(F("BH1750 Test Begin"));
 }
+
 void loop() {
-digitalWrite(TrigPin, LOW); 
-delayMicroseconds(2); 
-digitalWrite(TrigPin, HIGH); 
-delayMicroseconds(10); 
-digitalWrite(TrigPin, LOW); 
+  // Send a 10us high pulse to trigger TrigPin 
+  digitalWrite(TrigPin, LOW); 
+  delayMicroseconds(2); 
+  digitalWrite(TrigPin, HIGH); 
+  delayMicroseconds(10); 
+  digitalWrite(TrigPin, LOW); 
 
-cm = pulseIn(EchoPin, HIGH) / 58.0;
-cm = (int(cm * 100.0)) / 100.0; 
-Serial.print(cm); 
-Serial.print("cm"); 
-Serial.println(); 
+  cm = pulseIn(EchoPin, HIGH) / 58.0; // Convert to cm
+  cm = (int(cm * 100.0)) / 100.0;     // Keep 2 decimal places
+  Serial.print(cm); 
+  Serial.print("cm"); 
+  Serial.println(); 
 
-sensorValue1 = analogRead(analogInPin1);
-Serial.print("steam sensor = ");
-Serial.print(sensorValue1);
+  sensorValue1 = analogRead(analogInPin1);
+  Serial.print("steam sensor = ");
+  Serial.print(sensorValue1);
 
-int sensorValue3 = analogRead(A3);
-Serial.print("flame sensor = ");
-Serial.println(sensorValue3);
+  int sensorValue3 = analogRead(A3);
+  Serial.print("flame sensor = ");
+  Serial.println(sensorValue3);
 
-int sensorValue2 = analogRead(A2);
-Serial.print("sound sensor = ");
-Serial.println(sensorValue2);
-delay(1000);
+  int sensorValue2 = analogRead(A2);
+  Serial.print("sound sensor = ");
+  Serial.println(sensorValue2);
+  
+  delay(1000);
 }
