@@ -1,68 +1,43 @@
-# Prerequisites
-*.d
+#include <Wire.h>
+#include <BH1750.h>
+const int analogInPin1 = A1;
+int sensorValue1 = 0;
+const int TrigPin = 2; 
+const int EchoPin = 3; 
+float cm; 
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+BH1750 lightMeter;
+void setup() {
+Serial.begin(9600);
+Wire.begin();
+pinMode(TrigPin, OUTPUT); 
+pinMode(EchoPin, INPUT); 
+lightMeter.begin();
+Serial.println(F("BH1750 Test Begin"));
+}
+void loop() {
+digitalWrite(TrigPin, LOW); 
+delayMicroseconds(2); 
+digitalWrite(TrigPin, HIGH); 
+delayMicroseconds(10); 
+digitalWrite(TrigPin, LOW); 
 
-# Precompiled Headers
-*.gch
-*.pch
+cm = pulseIn(EchoPin, HIGH) / 58.0;
+cm = (int(cm * 100.0)) / 100.0; 
+Serial.print(cm); 
+Serial.print("cm"); 
+Serial.println(); 
 
-# Linker files
-*.ilk
+sensorValue1 = analogRead(analogInPin1);
+Serial.print("steam sensor = ");
+Serial.print(sensorValue1);
 
-# Debugger Files
-*.pdb
+int sensorValue3 = analogRead(A3);
+Serial.print("flame sensor = ");
+Serial.println(sensorValue3);
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-*.so.*
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# Build directories
-[Bb]uild/
-[Bb]uild-*/
-cmake-build-*/
-
-# CMake generated files
-CMakeFiles/
-CMakeCache.txt
-cmake_install.cmake
-Makefile
-install_manifest.txt
-compile_commands.json
-
-# Temporary files
-*.tmp
-*.log
-*.bak
-*.swp
-
-# vcpkg
-vcpkg_installed/
-
-# debug information files
-*.dwo
-
-# test output & cache
-Testing/
-.cache/
+int sensorValue2 = analogRead(A2);
+Serial.print("sound sensor = ");
+Serial.println(sensorValue2);
+delay(1000);
+}
